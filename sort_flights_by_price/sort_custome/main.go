@@ -1,7 +1,10 @@
 // 374.158345ms
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 // Flight - a struct that
 // contains information about flights
@@ -11,21 +14,29 @@ type Flight struct {
 	Price       int
 }
 
+// function for custom sort ByPrice
+// step1. define type
+type ByPrice []Flight
+
+// step2. return length
+func (b ByPrice) Len() int {
+	return len(b)
+}
+
+// step3. swap values
+func (b ByPrice) Swap(i, j int) {
+	b[i], b[j] = b[j], b[i]
+}
+
+// step4. compare value less return boolen
+func (b ByPrice) Less(i, j int) bool {
+	return b[i].Price > b[j].Price
+}
+
 // SortByPrice sorts flights from highest to lowest
 func SortByPrice(flights []Flight) []Flight {
 	// implement
-	for i := range flights {
-		sweeped := false
-		for j := 0; j < len(flights)-1-i; j++ {
-			if flights[j].Price < flights[j+1].Price {
-				flights[j], flights[j+1] = flights[j+1], flights[j]
-				sweeped = true
-			}
-		}
-		if !sweeped {
-			break
-		}
-	}
+	sort.Sort(ByPrice(flights))
 	return flights
 }
 
